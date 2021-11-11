@@ -1,11 +1,27 @@
-from __future__ import absolute_import, unicode_literals
 import os
+
 from celery import Celery
 
-# setting the Django settings module.
+# Set the default Django settings module for the 'celery' program.
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'core.settings')
-app = Celery('core')
-app.config_from_object('django.conf:settings', namespace='CELERY')
 
-# Looks up for task modules in Django applications and loads them
+app = Celery('core')
+
+# Using a string here means the worker doesn't have to serialize
+# the configuration object to child processes.
+# - namespace='CELERY' means all celery-related configuration keys
+#   should have a `CELERY_` prefix.
+app.config_from_object('django.conf:settings', namespace='CELERY')
+app.conf.beat_schedule = {
+    'every-15-seconds': {
+        'task': 'task.tasks.send_mail_func',
+        'schedule': 15,
+    }
+}
+# Load task modules from all registered Django apps.
 app.autodiscover_tasks()
+
+
+@app.task(bind=True)
+def debug_task(self):
+    print(f'Request: {self.request!r}')
