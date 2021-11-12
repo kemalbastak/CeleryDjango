@@ -39,8 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'task',
-    'celery',
-    'django_celery_results', 
+    'django_celery_results',
     'django_celery_beat',
 ]
 
@@ -78,12 +77,18 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 DATABASES = {
-    'default':{
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'PASSWORD': 'postgres',
+        'HOST': 'pgdb_celery',
+        'PORT': '5432',
     }
 }
 
+#username: kemal
+#password: 1234
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -144,6 +149,6 @@ EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_USE_TLS = True
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
-EMAIL_HOST_USER =
-EMAIL_HOST_PASSWORD =
+EMAIL_HOST_USER = 'your@email.com'
+EMAIL_HOST_PASSWORD = 'emailpassword'
 
