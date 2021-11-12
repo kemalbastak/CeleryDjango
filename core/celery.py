@@ -1,7 +1,6 @@
 import os
 
 from celery import Celery
-from celery.schedules import crontab
 from celery import shared_task
 # Set the default Django settings module for the 'celery' program.
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'core.settings')
@@ -14,14 +13,13 @@ app = Celery('core')
 #   should have a `CELERY_` prefix.
 app.config_from_object('django.conf:settings', namespace='CELERY')
 # Celery Beat Settings
-app.conf.beat_schedule = {
-    'send-mail-every-day-at-8': {
-        'task': 'task.tasks.send_mail_func',
-        'schedule': crontab(hour=17, minute=21),
-        # 'args': (2,)
-    }
-
-}
+# app.conf.beat_schedule = {
+#     'send-mail-every-day-at-8': {
+#         'task': 'task.tasks.send_mail_func',
+#         'schedule': crontab(hour=17, minute=21),
+#         # 'args': (2,)
+#     }
+# }
 # Load task modules from all registered Django apps.
 app.autodiscover_tasks()
 

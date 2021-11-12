@@ -15,15 +15,13 @@ def get_due_date(day: int):
     """
     return [(datetime.today()+timedelta(day)).strftime('%Y-%m-%d'), (datetime.today()+timedelta(day)).strftime('%Y-%m-%d')]
 
-@shared_task(bind=True)
-def send_mail_func(self):
-    users = Tasks.objects.filter(due_date__range=get_due_date(3))
+@shared_task
+def send_mail_func(day):
+    users = Tasks.objects.filter(due_date__range=get_due_date(day))
     print("send mail func")
-    time.sleep(10)
-    #timezone.localtime(users.date_time) + timedelta(days=2)
     for user in users[0:5]:
-        mail_subject = "Hi! Celery Testing"
-        message = "If you are liking my content, please hit the like button and do subscribe to my channel"
+        mail_subject = f"Merhabalar taskınızın tamamlanmasına {day} kalmıştır."
+        message = f"Taskınızı kontrol ediniz. {user.user}. Tamamlanma günü {user.due_date}"
         to_email = user.email
         print(to_email)
         send_mail(

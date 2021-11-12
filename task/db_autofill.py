@@ -16,13 +16,4 @@ def func():
     task = Tasks(**data)
 
     task.save()
-"""
-dueDate = "17.11.2021"
-
-dueDateStr = datetime.datetime.strptime(dueDate, '%d.%m.%Y').strftime('%Y-%m-%d')
-dueDateDate = datetime.datetime.strptime(dueDateStr, '%Y-%m-%d').date()
-today = datetime.date.today()
-diff = (dueDateDate-today).days
-if diff==5:
-    print("5 gün kaldı")
-"""
+    

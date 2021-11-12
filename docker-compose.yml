@@ -43,6 +43,19 @@ services:
         depends_on:
             - redis
             - django
+    celery-beat-db:
+        build: .
+        command: celery -A core beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
+        volumes:
+            - .:/usr/src/app
+        environment:
+            - DEBUG=1
+            - DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]
+            - CELERY_BROKER=redis://redis:6379/0
+            - CELERY_BACKEND=redis://redis:6379/0
+        depends_on:
+            - redis
+            - django
     pgdb_celery:
         image: postgres
         container_name: pgdb_celery
@@ -63,7 +76,7 @@ services:
         ports:
             - 5050:80
         depends_on:
-            - db
+            - pgdb_celery
     redis:
         image: "redis:alpine"
 
