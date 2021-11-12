@@ -6,17 +6,18 @@ import time
 from datetime import datetime, timedelta
 
 
-def create_date_range(day1: int, day2: int):
+def get_due_date(day: int):
     """
-    day1: adds days to today
-    day2: adds days to today
-    returns: [today+day1, today+day2]
+    day: adds days to today
+    returns: [today+day, today+day]
+    ex: The day of today is 2021-11-12
+    create_date_range(3) returns 2021-11-15
     """
-    return [(datetime.today()+timedelta(day1)).strftime('%Y-%m-%d'), (datetime.today()+timedelta(day2)).strftime('%Y-%m-%d')]
+    return [(datetime.today()+timedelta(day)).strftime('%Y-%m-%d'), (datetime.today()+timedelta(day)).strftime('%Y-%m-%d')]
 
 @shared_task(bind=True)
 def send_mail_func(self):
-    users = Tasks.objects.filter(due_date__range=create_date_range(3, 4))
+    users = Tasks.objects.filter(due_date__range=get_due_date(3))
     print("send mail func")
     time.sleep(10)
     #timezone.localtime(users.date_time) + timedelta(days=2)
